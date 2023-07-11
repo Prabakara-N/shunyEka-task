@@ -15,7 +15,7 @@ const UserInfo = () => {
   }, [id]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen max-w-2xl mx-auto">
+    <div className="flex items-center justify-center min-h-screen max-w-3xl mx-auto">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -28,7 +28,7 @@ const UserInfo = () => {
             <th scope="row" className="px-10 py-3">
               Email
             </th>
-            <th scope="row" className="px-6 py-3">
+            <th scope="row" className="px-10 py-3">
               Phone Number
             </th>
           </tr>
@@ -44,7 +44,7 @@ const UserInfo = () => {
             </th>
             <td className="px-10 py-4">{user.userName}</td>
             <td className="px-10 py-4">{user.email}</td>
-            <td className="px-6 py-4">{user.number}</td>
+            <td className="px-10 py-4">{user.number}</td>
           </tr>
         </tbody>
       </table>

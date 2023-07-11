@@ -35,7 +35,7 @@ export const deleteUser = createAsyncThunk(
   async ({ id, toast }, { rejectWithValue }) => {
     try {
       const response = await api.deleteUser(id);
-      toast.success("User Deleted");
+      toast.success("User Deleted Successfully");
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
