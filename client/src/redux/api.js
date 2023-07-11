@@ -7,4 +7,4 @@ export const getUsers = () => API.get("/user");
 export const deleteUser = (id) => API.delete(`/user/${id}`);
 export const updateUser = (updatedUser, id) =>
   API.patch(`/user/${id}`, updatedUser);
-export const sigleUser = (id) => API.get(`/user/${id}`);
+export const singleUser = (id) => API.get(`/user/${id}`);

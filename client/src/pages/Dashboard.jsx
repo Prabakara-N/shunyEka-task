@@ -72,7 +72,7 @@ const Dashboard = () => {
                             {user.userName}
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                            <Link to={"/userinfo"}>
+                            <Link to={`/userinfo/${user._id}`}>
                               <button
                                 type="button"
                                 className="text-blue-800 py-2 px-3 rounded-md border-solid border-[1px] border-blue-700"

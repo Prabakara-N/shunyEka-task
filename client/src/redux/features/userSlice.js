@@ -59,11 +59,11 @@ export const updateUser = createAsyncThunk(
 );
 
 // single user
-export const sigleUser = createAsyncThunk(
-  "blog/sigleUser",
+export const singleUser = createAsyncThunk(
+  "user/singleUser",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await api.sigleUser(id);
+      const response = await api.singleUser(id);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -140,14 +140,14 @@ const userSlice = createSlice({
     },
 
     // get single user
-    [sigleUser.pending]: (state) => {
+    [singleUser.pending]: (state) => {
       state.loading = true;
     },
-    [sigleUser.fulfilled]: (state, action) => {
+    [singleUser.fulfilled]: (state, action) => {
       state.loading = false;
-      state.blog = action.payload;
+      state.user = action.payload;
     },
-    [sigleUser.rejected]: (state, action) => {
+    [singleUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
