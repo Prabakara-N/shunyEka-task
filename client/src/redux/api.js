@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000" });
+const API = axios.create({ baseURL: "https://shunyeka.onrender.com" });
 
 export const createUser = (userData) => API.post("/user", userData);
 export const getUsers = () => API.get("/user");
