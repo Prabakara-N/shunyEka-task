@@ -14,7 +14,6 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(getUsers()); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(users);
 
   const handleDelete = (id) => {
     dispatch(deleteUser({ id, toast }));

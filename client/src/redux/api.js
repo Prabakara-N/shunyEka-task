@@ -1,6 +1,12 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://shunyeka.onrender.com" });
+const devEnv = process.env.NODE_ENV !== "production";
+
+const { REACT_APP_DEV_API, REACT_APP_PROD_API } = process.env;
+
+const API = axios.create({
+  baseURL: `${devEnv ? REACT_APP_DEV_API : REACT_APP_PROD_API}`,
+});
 
 export const createUser = (userData) => API.post("/user", userData);
 export const getUsers = () => API.get("/user");
