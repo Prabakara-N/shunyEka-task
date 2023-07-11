@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createUser } from "../redux/features/userSlice";
+import { createUser, updateUser } from "../redux/features/userSlice";
 
 const initialState = {
   userName: "",
@@ -15,10 +15,17 @@ const AddEdituser = () => {
   const { userName, email, number } = userInfo;
   const { id } = useParams();
 
-  const { error, loading } = useSelector((state) => ({ ...state.user }));
+  const { error, users } = useSelector((state) => ({ ...state.user }));
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) {
+      const userDetails = users.find((user) => user._id === id);
+      setUserInfo({ ...userDetails });
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     error && toast.error(error);
@@ -27,9 +34,12 @@ const AddEdituser = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (userName && email && number) {
-      const newUser = { ...userInfo };
-      console.log(newUser);
-      dispatch(createUser({ newUser, navigate, toast }));
+      const user = { ...userInfo };
+      if (!id) {
+        dispatch(createUser({ user, navigate, toast }));
+      } else {
+        dispatch(updateUser({ id, user, navigate, toast }));
+      }
       setUserInfo({ userName: "", email: "", number: "" });
     } else {
       toast.error("All fields are mandatory...");

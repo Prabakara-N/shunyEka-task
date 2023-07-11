@@ -4,9 +4,9 @@ import * as api from "../api";
 // create user
 export const createUser = createAsyncThunk(
   "user/createUser",
-  async ({ newUser, navigate, toast }, { rejectWithValue }) => {
+  async ({ user, navigate, toast }, { rejectWithValue }) => {
     try {
-      const response = await api.createUser(newUser);
+      const response = await api.createUser(user);
       toast.success("User Added Successfully");
       navigate("/");
       return response.data;
@@ -22,6 +22,48 @@ export const getUsers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.getUsers();
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+// delete user
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async ({ id, toast }, { rejectWithValue }) => {
+    try {
+      const response = await api.deleteUser(id);
+      toast.success("User Deleted");
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+// update users
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async ({ id, user, navigate, toast }, { rejectWithValue }) => {
+    try {
+      const response = await api.updateUser(user, id);
+      toast.success("User Updated Successfully");
+      navigate("/");
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+// single user
+export const sigleUser = createAsyncThunk(
+  "blog/sigleUser",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.sigleUser(id);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -59,6 +101,53 @@ const userSlice = createSlice({
       state.users = action.payload;
     },
     [getUsers.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+
+    // delete user
+    [deleteUser.pending]: (state) => {
+      state.loading = true;
+    },
+    [deleteUser.fulfilled]: (state, action) => {
+      state.loading = false;
+      const { id } = action.meta.arg;
+      if (id) {
+        state.users = state.users.filter((user) => user._id !== id);
+      }
+    },
+    [deleteUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+
+    // update user
+    [updateUser.pending]: (state) => {
+      state.loading = true;
+    },
+    [updateUser.fulfilled]: (state, action) => {
+      state.loading = false;
+      const { id } = action.meta.arg;
+      if (id) {
+        state.users = state.users.map((user) =>
+          user._id === id ? action.payload : user
+        );
+      }
+    },
+    [updateUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+
+    // get single user
+    [sigleUser.pending]: (state) => {
+      state.loading = true;
+    },
+    [sigleUser.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.blog = action.payload;
+    },
+    [sigleUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },

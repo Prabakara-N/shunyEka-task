@@ -1,18 +1,28 @@
 import React, { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from "../redux/features/userSlice";
+import { getUsers, deleteUser } from "../redux/features/userSlice";
+import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
+
   const { users, loading } = useSelector((state) => ({ ...state.user }));
 
   useEffect(() => {
     dispatch(getUsers()); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   console.log(users);
+
+  const handleDelete = (id) => {
+    dispatch(deleteUser({ id, toast }));
+  };
+
+  if (!loading) {
+    <Loader />;
+  }
 
   return (
     <div className="px-40 py-6">
@@ -51,7 +61,7 @@ const Dashboard = () => {
                   {users && users.length > 0 ? (
                     users.map((user) => {
                       return (
-                        <tr key={id}>
+                        <tr key={user._id}>
                           <td className="py-3 pl-4">
                             <div className="flex items-center h-5"></div>
                           </td>
@@ -61,37 +71,34 @@ const Dashboard = () => {
                           <td className="px-6 py-4 text-sm text-gray-800 font-semibold whitespace-nowrap">
                             {user.userName}
                           </td>
-                          <div>
-                            <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                              <Link to={"/userinfo"}>
-                                <button
-                                  type="button"
-                                  className="text-blue-800 py-2 px-3 rounded-md border-solid border-[1px] border-blue-700"
-                                >
-                                  View
-                                </button>
-                              </Link>
-                            </td>
-
-                            <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap cursor-pointer">
-                              <Link to={`/edituser/${id}`}>
-                                <button
-                                  type="button"
-                                  className="text-gray-700 flex items-center justify-center gap-2 py-2 px-3 rounded-md border-solid border-[1px] border-gray-800"
-                                >
-                                  Update <MdEdit />
-                                </button>
-                              </Link>
-                            </td>
-                            <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                          <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                            <Link to={"/userinfo"}>
                               <button
                                 type="button"
-                                className="text-red-500 flex items-center justify-center gap-2 py-2 px-3 rounded-md border-solid border-[1px] border-red-500"
+                                className="text-blue-800 py-2 px-3 rounded-md border-solid border-[1px] border-blue-700"
                               >
-                                Delete <MdDelete />
+                                View
                               </button>
-                            </td>
-                          </div>
+                            </Link>
+                          </td>
+                          <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap cursor-pointer flex items-center justify-center gap-4">
+                            <Link to={`/edituser/${user._id}`}>
+                              <button
+                                type="button"
+                                className="text-gray-700 flex items-center justify-center gap-2 py-2 px-3 rounded-md border-solid border-[1px] border-gray-800"
+                              >
+                                Update <MdEdit />
+                              </button>
+                            </Link>
+
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(user._id)}
+                              className="text-red-500 flex items-center justify-center gap-2 py-2 px-3 rounded-md border-solid border-[1px] border-red-500"
+                            >
+                              Delete <MdDelete />
+                            </button>
+                          </td>
                         </tr>
                       );
                     })
